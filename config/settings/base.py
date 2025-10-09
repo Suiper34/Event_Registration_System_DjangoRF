@@ -19,6 +19,11 @@ ALLOWED_HOSTS = [host for host in _raw_allowed.split(',') if host
                  ] if _raw_allowed else ['127.0.0.1', 'localhost']
 
 
+# customize admin site titles
+ADMIN_SITE_TITLE = environ.get('ADMIN_SITE_TITLE', 'E.R.S Admins')
+ADMIN_INDEX_TITLE = environ.get('ADMIN_INDEX_TITLE', 'JhapTech Administration')
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -28,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # DRF and Token Auth
+    # third party(DRF, Token Auth)
     'rest_framework',
     'rest_framework.authtoken',
 
