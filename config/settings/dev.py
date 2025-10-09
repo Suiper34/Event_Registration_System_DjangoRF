@@ -24,6 +24,7 @@ INSTALLED_APPS: list[str] = [
     'django.contrib.staticfiles',
     # third party
     'rest_framework',
+    'rest_framework.authtoken',
     # local apps
     'events.apps.EventsConfig',
 ]
@@ -66,7 +67,7 @@ DATABASES: dict[str, dict[str, str]] = {
     }
 }
 
-# password validation (keep same validators as base; ensure strings are exact import paths)
+# password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -94,8 +95,8 @@ EMAIL_BACKEND: str = environ.get(
     'EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 
 # redirect users to home after login/logout when no "next" provided
-LOGIN_REDIRECT_URL: str = 'home'
-LOGOUT_REDIRECT_URL: str = 'home'
+LOGIN_REDIRECT_URL: str = 'events:event-list'
+LOGOUT_REDIRECT_URL: str = 'events:home'
 
 if DEBUG:
     try:
@@ -103,3 +104,16 @@ if DEBUG:
     except Exception:
         # keep original list
         pass
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+}
